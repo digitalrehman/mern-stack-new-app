@@ -1,15 +1,11 @@
 import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
-  userId: {
+  userName: {
     type: String,
     required: true,
     unique: true
   },
-  fullName: {
-    type: String,
-    required: true
-  },
-  userName: {
+  email: {
     type: String,
     required: true,
     unique: true
@@ -18,13 +14,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  role: {
-    type: String,
-    required: true,
-    enum: ['admin', 'author'],
-    default: 'author'
-  }
-},{
+
+}, {
   timestamps: true
 });
 
