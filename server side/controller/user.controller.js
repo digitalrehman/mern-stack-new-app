@@ -4,9 +4,9 @@ import jwt from "jsonwebtoken";
 
 export let signUp = async (req, res) => {
     try {
-        let { userName, email, password } = req.body;
+        let { name, email, password } = req.body;
         // validate the data
-        if (!userName || !email || !password) {
+        if (!name || !email || !password) {
             return res.status(400).json({
                 message: "All fields are required"
             })
@@ -23,22 +23,22 @@ export let signUp = async (req, res) => {
 
         // create a new user
         let newUser = await User.create({
-            userName,
+            name,
             email,
             password: hashedPassword
         });
 
 
         res.status(201).json({
-            message: `${newUser.userName} created successfully`,
+            message: `${newUser.name} created successfully`,
             user: {
-                userName: newUser.userName,
+                name: newUser.name,
                 email: newUser.email
             }
         })
 
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         res.status(500).json({
             message: "Server error"
         })
@@ -82,10 +82,10 @@ export let login = async (req, res) => {
             sameSite: "strict",
             maxAge: 1000 * 60 * 60 * 24 * 7 // 7days
         })
-        res.status(200).json({
+        res.status(201).json({
             message: "Login successful",
             user: {
-                userName: existingUser.userName,
+                name: existingUser.name,
                 email: existingUser.email
             }
         })
