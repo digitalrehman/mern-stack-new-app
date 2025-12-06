@@ -8,7 +8,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +25,7 @@ const Navbar = () => {
   }
   return (
     <div className="h-16 w-full flex items-center justify-between px-4 fixed z-20 border-b bg-white">
-      <h1 className="text-4xl font-extrabold">News</h1>
+      <Button onClick={() => navigate("/")} variant={"link"} className="text-4xl font-extrabold">News</Button>
       <form className="flex items-center gap-2">
         <Input type="text" placeholder="Search here.. " className={"w-96"} />
         <Button>Search</Button>
@@ -35,7 +34,18 @@ const Navbar = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              <User className="w-6 h-6" /> {user.name}
+              {
+                user.image ? (
+                  <img
+                    src={user.image}
+                    alt="avatar"
+                    className="h-6 w-6 rounded-full"
+                  />
+                ) : (
+                  <User className="w-6 h-6" />
+                )
+              }
+              {user.name}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="start">
@@ -44,7 +54,7 @@ const Navbar = () => {
               <DropdownMenuItem onClick={() => navigate("/profile")}>
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem >
+              <DropdownMenuItem>
                 <Button onClick={logoutHandler} variant={"ghost"} className={"w-full"}>
                   Log out
                 </Button>

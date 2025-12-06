@@ -2,16 +2,7 @@ import slugify from "slugify";
 import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema({
-  categoryId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   categoryName: {
-    type: String,
-    required: true,
-  },
-  description: {
     type: String,
     required: true,
   },
@@ -19,10 +10,12 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+}, {
+  timestamps: true,
 });
 
-categorySchema.pre("save", function(next) {
-  if (this.isNew) {
+categorySchema.pre("save", function (next) {
+  if (this.slug) {
     this.slug = slugify(this.categoryName, { lower: true });
   }
   next();
