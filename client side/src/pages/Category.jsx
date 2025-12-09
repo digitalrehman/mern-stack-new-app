@@ -14,7 +14,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
-import { Loader } from "lucide-react";
+import Loader from "@/components/Loader";
+import toast from "react-hot-toast";
 
 const Category = () => {
   let [category, setCategory] = useState([]);
@@ -23,11 +24,32 @@ const Category = () => {
   async function fetchCategory() {
     try {
       setLoading(true);
-      const response = await axios.get(import.meta.env.VITE_CATE_URL);
+      const response = await axios.get(import.meta.env.VITE_CATE_URL, {
+        withCredentials: true,
+      });
       setCategory(response.data.getAll);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error(`${error.response.data.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteCategory(id) {
+    try {
+      setLoading(true);
+      const response = await axios.delete(
+        `${import.meta.env.VITE_CATE_URL}/delete/${id}`,
+        { withCredentials: true }
+      );
+      if (response.status == 200) {
+        toast.success(`${response.data.message}`);
+        fetchCategory();
+      }
+      setLoading(false);
+    } catch (error) {
+      toast.error(`${error.response.data.message}`);
     } finally {
       setLoading(false);
     }
@@ -35,6 +57,10 @@ const Category = () => {
   useEffect(() => {
     fetchCategory();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div>
       <Card>
@@ -47,7 +73,7 @@ const Category = () => {
 
           {/* table start */}
           <Table className={"mt-5"}>
-            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableCaption>Category List</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead>Category Name</TableHead>
@@ -56,32 +82,34 @@ const Category = () => {
               </TableRow>
             </TableHeader>
 
-            {loading ? (
-              <TableBody>
-                <TableRow>
-                  <TableCell colSpan={3} className="h-24 text-center">
-                    <Loader className="animate-spin" />
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            ) : (
-              <TableBody>
-                {category.map((item) => (
+            <TableBody>
+              {category.length > 0 ? (
+                category.map((item) => (
                   <TableRow key={item._id}>
                     <TableCell>{item.categoryName}</TableCell>
                     <TableCell>{item.slug}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size={"icon"}>
+                      <Button variant="outline" size={"icon"} onClick={() => navigate(`/update-category/${item._id}`)}>
                         <Pencil />
                       </Button>
-                      <Button variant="outline" size={"icon"}>
+                      <Button
+                        variant="outline"
+                        size={"icon"}
+                        onClick={() => deleteCategory(item._id)}
+                      >
                         <Trash />
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            )}
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={3} className="h-24 text-center">
+                    No categories found.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
           </Table>
         </CardContent>
       </Card>

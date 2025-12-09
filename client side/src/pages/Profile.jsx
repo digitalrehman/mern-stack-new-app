@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { setUser } from "@/store/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Loader } from "lucide-react";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -18,16 +19,19 @@ const Profile = () => {
   const [avatarFile, setAvatarFile] = useState(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  let [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
       setName(user.name || "");
       setBio(user.bio || "");
       setAvatarPreview(user.image || "");
+      setLoading(false);
     }
   }, [user]);
 
   const handleAvatarChange = (e) => {
+    setLoading(true);
     const file = e.target.files?.[0];
     if (!file) return;
     setAvatarFile(file);
@@ -44,6 +48,7 @@ const Profile = () => {
     setAvatarPreview(user?.image || "");
     setMessage("");
     setError("");
+    setLoading(false);
   };
 
   const handleSave = async (e) => {
@@ -57,6 +62,7 @@ const Profile = () => {
     }
 
     try {
+      setLoading(true);
       let formData = new FormData();
       formData.append("name", name);
       formData.append("bio", bio);
@@ -83,6 +89,8 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
       setError("Failed to update profile");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,7 +104,6 @@ const Profile = () => {
             <div className="flex flex-col items-center gap-2">
               <div className="h-24 w-24 overflow-hidden rounded-full border bg-muted">
                 {avatarPreview ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={avatarPreview}
                     alt="avatar"
@@ -158,7 +165,9 @@ const Profile = () => {
             <Button variant="outline" type="button" onClick={handleClear}>
               Clear
             </Button>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? <Loader className="animate-spin" /> : "Save"}
+            </Button>
           </div>
         </form>
       </div>

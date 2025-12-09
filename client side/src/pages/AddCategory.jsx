@@ -19,6 +19,9 @@ const AddCategory = () => {
         `${import.meta.env.VITE_CATE_URL}/create`,
         {
           categoryName,
+        },
+        {
+          withCredentials: true,
         }
       );
       if (resposne.status === 201) {
@@ -28,7 +31,7 @@ const AddCategory = () => {
       }
     } catch (error) {
       setLoading(false);
-      toast.error(resposne.data.message);
+      toast.error(error.response.data.message);
       console.log(error);
     } finally {
       setLoading(false);
