@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import routes from "./routes/user.routes.js";
 import connectDB from "./config/dbconnection.js";
 import categoryRoutes from "./routes/category.route.js";
+import newsRoutes from "./routes/new.route.js";
 let app = expres();
 let port = process.env.PORT || 5000;
 
@@ -19,6 +20,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use("/api/auth", routes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/news", newsRoutes);
 
 connectDB();
 

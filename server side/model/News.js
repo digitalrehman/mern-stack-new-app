@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 
 const newsSchema = new mongoose.Schema({
-  newsId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   title: {
     type: String,
     required: true,
@@ -14,16 +9,13 @@ const newsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   image: {
     type: String,
     required: true,
   },
   category: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
     required: true,
   },
   author: {
@@ -31,6 +23,9 @@ const newsSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+}, {
+  timestamps: true,
 });
 
 const News = mongoose.model("News", newsSchema);
+export default News

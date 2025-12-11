@@ -5,6 +5,7 @@ let user = createSlice({
   initialState: {
     isLogin: false,
     user: {},
+    selected_category: "",
   },
   reducers: {
     setUser: (state, action) => {
@@ -15,9 +16,14 @@ let user = createSlice({
       state.isLogin = false;
       state.user = {};
     },
+    setSelectedCategory: (state, action) => {
+      console.log(action.payload);
+
+      state.selected_category = action.payload;
+    },
   },
 });
 
-export const { setUser, setLogout } = user.actions;
+export const { setUser, setLogout, setSelectedCategory } = user.actions;
 let reducers = user.reducer;
-export default reducers 
+export default reducers;

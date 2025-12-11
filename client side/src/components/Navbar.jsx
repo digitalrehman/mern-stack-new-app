@@ -25,10 +25,10 @@ const Navbar = () => {
   }
   return (
     <div className="h-16 w-full flex items-center justify-between px-4 fixed z-20 border-b bg-white">
-      <Button onClick={() => navigate("/")} variant={"link"} className="text-4xl font-extrabold">News</Button>
+      <Button onClick={() => navigate("/")} variant={"link"} className="text-4xl font-extrabold cursor-pointer">News</Button>
       <form className="flex items-center gap-2">
         <Input type="text" placeholder="Search here.. " className={"w-96"} />
-        <Button>Search</Button>
+        <Button className="cursor-pointer">Search</Button>
       </form>
       {isLogin ? (
         <DropdownMenu>
@@ -55,7 +55,7 @@ const Navbar = () => {
                 Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Button onClick={logoutHandler} variant={"ghost"} className={"w-full"}>
+                <Button onClick={logoutHandler} variant={"ghost"} className={"w-full cursor-pointer"}>
                   Log out
                 </Button>
               </DropdownMenuItem>

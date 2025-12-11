@@ -5,12 +5,16 @@ import { ArrowLeftIcon, Loader } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const UpdateCategory = () => {
+  let { selected_category } = useSelector((state) => state.user);
+
   let { id } = useParams();
   let navigate = useNavigate();
-  let [categoryName, setCategoryName] = useState("");
+  let [categoryName, setCategoryName] = useState(selected_category);
   let [loading, setLoading] = useState(false);
+
 
   async function handleSubmit(e) {
     e.preventDefault();

@@ -16,8 +16,11 @@ import {
 import axios from "axios";
 import Loader from "@/components/Loader";
 import toast from "react-hot-toast";
+import { setSelectedCategory } from "@/store/auth";
+import { useDispatch } from "react-redux";
 
 const Category = () => {
+  let dispatch = useDispatch();
   let [category, setCategory] = useState([]);
   let [loading, setLoading] = useState(false);
   let navigate = useNavigate();
@@ -89,7 +92,14 @@ const Category = () => {
                     <TableCell>{item.categoryName}</TableCell>
                     <TableCell>{item.slug}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size={"icon"} onClick={() => navigate(`/update-category/${item._id}`)}>
+                      <Button
+                        variant="outline"
+                        size={"icon"}
+                        onClick={() => {
+                          dispatch(setSelectedCategory(item.categoryName));
+                          navigate(`/update-category/${item._id}`);
+                        }}
+                      >
                         <Pencil />
                       </Button>
                       <Button
